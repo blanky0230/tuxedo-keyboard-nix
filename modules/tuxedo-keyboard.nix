@@ -9,13 +9,25 @@ let
 in
   {
     options.tuxedo-keyboard = {
-        enable = mkEnableOption "tuxedo-keyboard";
+      enable = mkEnableOption "tuxedo-keyboard";
+      color = mkOption {
+        type = types.str;
+        default = "FF0000";
+      };
+      brightness = mkOption {
+        type = types.ints.positive;
+        default = 255;
+      };
     };
 
     config = mkIf cfg.enable 
     {
          boot.kernelModules = ["tuxedo_keyboard"];
          boot.extraModulePackages =   [ tuxedo-keyboard ];
-         
+         boot.kernelParams = [
+           "tuxedo_keyboard.mode=0"
+           "tuxedo_keyboard.brightness=${toString cfg.brightness}"
+           "tuxedo_keyboard.color_left=0x${cfg.color}"
+         ]; 
     };
   }
