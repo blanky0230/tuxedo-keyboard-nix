@@ -4,8 +4,11 @@ with lib;
 
 let 
     cfg = config.tuxedo-keyboard;
-    tuxedo-keyboard = (pkgs.callPackage ../pkgs/tuxedo-keyboard/default.nix {});
 
+    tuxedo-keyboard = (
+      pkgs.callPackage ../pkgs/tuxedo-keyboard/default.nix {
+        linuxPackages=config.boot.kernelPackages;
+      });
 in
   {
     options.tuxedo-keyboard = {
